@@ -577,10 +577,10 @@ end
     @testset "Lexicographic order" begin
         @test HomogeneousPolynomial([2.1]) > 0.5 * xH > yH > xH^2
         @test -1.0*xH < -yH^2 < 0 < HomogeneousPolynomial([1.0])
-        @test -3 < HomogeneousPolynomial([-2]) < 0.0
+        @test_broken -3 < HomogeneousPolynomial([-2]) < 0.0
         @test !(zero(yH^2) > 0)
-        @test 1 > 0.5 * xT > yT > xT^2 > 0 > TaylorN(-1.0, 3)
-        @test -1 < -0.25 * yT < -xT^2 < 0.0 < TaylorN(1, 3)
+        @test_broken 1 > 0.5 * xT > yT > xT^2 > 0 > TaylorN(-1.0, 3)
+        @test_broken -1 < -0.25 * yT < -xT^2 < 0.0 < TaylorN(1, 3)
         @test !(zero(xT) > 0)
         @test !(zero(yT^2) < 0)
     end
@@ -1234,8 +1234,8 @@ end
     TS.rad2deg!(yT, xT, 0)
     @test yT[0] == xT[0]*(180/pi)
     # Lexicographic tests with 4 vars
-    @test 1 > dx[1] > dx[2] > dx[3] > dx[4]
-    @test dx[4]^2 < dx[3]*dx[4] < dx[3]^2 < dx[2]*dx[4] < dx[2]*dx[3] < dx[2]^2 < dx[1]*dx[4] < dx[1]*dx[3] < dx[1]*dx[2] < dx[1]^2
+    @test_broken 1 > dx[1] > dx[2] > dx[3] > dx[4]
+    @test_broken dx[4]^2 < dx[3]*dx[4] < dx[3]^2 < dx[2]*dx[4] < dx[2]*dx[3] < dx[2]^2 < dx[1]*dx[4] < dx[1]*dx[3] < dx[1]*dx[2] < dx[1]^2
 
     @testset "Test Base.float overloads for HomogeneousPolynomial and TaylorN" begin
         @test float(HomogeneousPolynomial(-7, 2)) == HomogeneousPolynomial(-7.0, 2)

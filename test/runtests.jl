@@ -3,6 +3,7 @@
 # Tests for TaylorSeries
 
 testfiles = (
+    "nested.jl",
     "onevariable.jl",
     "manyvariables.jl",
     "mixtures.jl",

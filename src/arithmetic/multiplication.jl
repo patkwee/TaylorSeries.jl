@@ -9,14 +9,14 @@
 ## Multiplication ##
 for T in (:Taylor1, :TaylorN)
     @eval begin
-        function *(a::T, b::$T{S}) where {T<:NumberNotSeries, S<:NumberNotSeries}
+        function *(a::T, b::$T{S}) where {T<:NumberNotSeries, S<:Number}
             v = $T( a * b.coeffs[1], order(b))
             @inbounds for k in eachindex(v)
                 mul!(v, b, a, k)
             end
             return v
         end
-        *(b::$T{S}, a::T) where {T<:NumberNotSeries, S<:NumberNotSeries} = a * b
+        *(b::$T{S}, a::T) where {T<:NumberNotSeries, S<:Number} = a * b
         function *(a::T, b::$T{T}) where {T<:NumberNotSeries}
             v = $T( a * b.coeffs[1], order(b))
             @inbounds for k in eachindex(v)
@@ -29,9 +29,9 @@ for T in (:Taylor1, :TaylorN)
 end
 
 *(a::T, b::HomogeneousPolynomial{S}) where {T<:NumberNotSeries,
-    S<:NumberNotSeries} = HomogeneousPolynomial(b.space, a .* b.coeffs, order(b))
+    S<:Number} = HomogeneousPolynomial(b.space, a .* b.coeffs, order(b))
 *(b::HomogeneousPolynomial{S}, a::T) where {T<:NumberNotSeries,
-    S<:NumberNotSeries} = a * b
+    S<:Number} = a * b
 *(a::T, b::HomogeneousPolynomial{T}) where {T<:NumberNotSeries} =
     HomogeneousPolynomial(b.space, a .* b.coeffs, order(b))
 *(b::HomogeneousPolynomial{T}, a::T) where {T<:NumberNotSeries} = a * b
@@ -69,7 +69,7 @@ function *(a::Taylor1{T}, b::Taylor1{T}) where {T<:Number}
     return c
 end
 
-function *(a::TaylorN{T}, b::TaylorN{T}) where {T<:NumberNotSeriesN}
+function *(a::TaylorN{T}, b::TaylorN{T}) where {T<:Number}
     a, b = _unify_space(a, b)
     if order(a) != order(b)
         a, b = fixorder(a, b)

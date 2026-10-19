@@ -448,7 +448,7 @@ to be used in the construction of a `HomogeneousPolynomial` of order
 `order`. The returned vector has the first entries of `coeffs`,
 and then is filled with zeros.
 """
-function _coeffsHP(space::JetSpace, x::T, order::Int) where {T<:NumberNotSeries}
+function _coeffsHP(space::JetSpace, x::T, order::Int) where {T<:Number}
     @assert order ≤ TS.order(space)
     num_coeffs = space.size_table[order+1]
     v = FixedSizeVectorDefault{T}(undef, num_coeffs)

@@ -109,11 +109,11 @@ function /(a::Taylor1{T}, b::Taylor1{Taylor1{S}}) where
     return c
 end
 
+# FIXME Removed for now, need test case
+# /(a::TaylorN{T}, b::TaylorN{S}) where
+#     {T<:NumberNotSeriesN, S<:NumberNotSeriesN} = /(promote(a,b)...)
 
-/(a::TaylorN{T}, b::TaylorN{S}) where
-    {T<:NumberNotSeriesN, S<:NumberNotSeriesN} = /(promote(a,b)...)
-
-function /(a::TaylorN{T}, b::TaylorN{T}) where {T<:NumberNotSeriesN}
+function /(a::TaylorN{T}, b::TaylorN{T}) where {T<:Number}
     a, b = _unify_space(a, b)
     @assert !_isthinzero(constant_term(b))
     if order(a) != order(b)
@@ -483,7 +483,7 @@ end
 
 # TODO: avoid allocations when T isa Taylor1
 @inline function div!(v::HomogeneousPolynomial{T},
-        a::HomogeneousPolynomial{T}, b::NumberNotSeriesN) where {T <: Number}
+        a::HomogeneousPolynomial{T}, b::Number) where {T <: Number}
     _check_same_space(v, a)
     @inbounds for k in eachindex(v)
         v.coeffs[k] = a.coeffs[k] / b

@@ -241,6 +241,11 @@ function numbr2str(zz::Complex, ifirst::Bool=false)
     return cadena
 end
 
+function numbr2str(zz::TaylorN, ifirst::Bool=false)
+    plusmin = ifelse( ifirst, string("("), string("+ (") )
+    return string(plusmin, zz, ")")
+end
+
 name_taylorNvar(i::Int) = string(" ", get_variable_names()[i])
 name_taylorNvar(space::JetSpace, i::Int) =
     string(" ", get_variable_names(space)[i])

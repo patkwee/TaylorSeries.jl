@@ -290,7 +290,7 @@ for (f, fc) in ((:+, :(add!)), (:-, :(subst!)))
 
     @eval begin
         function ($f)(a::HomogeneousPolynomial{T}, b::HomogeneousPolynomial{S}) where
-                {T<:NumberNotSeriesN, S<:NumberNotSeriesN}
+                {T<:Number, S<:Number}
             a, b = _unify_space(a, b)
             @assert order(a) == order(b)
             v = ($f)(a.coeffs, b.coeffs)

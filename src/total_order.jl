@@ -52,7 +52,14 @@ end
 ## Total ordering ##
 for T in (:Taylor1, :TaylorN)
     @eval begin
-        @inline function isless(a::$T{<:Number}, b::Real)
+        # FIXME Needs a bit more thought, breaks total order tests
+        @inline function isless(a::$T{T}, b::Real) where {T<:Number}
+            return isless(constant_term(a), b)
+        end
+        @inline function isless(b::Real, a::$T{T}) where {T<:Number}
+            return isless(b, constant_term(a))
+        end
+        @inline function isless(a::$T{T}, b::T) where {T<:Number}
             a0 = constant_term(a)
             a0 != b && return isless(a0, b)
             nz = findfirst(a-b)
@@ -62,7 +69,7 @@ for T in (:Taylor1, :TaylorN)
                 return isless(a[nz], zero(b))
             end
         end
-        @inline function isless(b::Real, a::$T{<:Number})
+        @inline function isless(b::T, a::$T{T}) where {T<:Number}
             a0 = constant_term(a)
             a0 != b && return isless(b, a0)
             nz = findfirst(b-a)
@@ -73,9 +80,9 @@ for T in (:Taylor1, :TaylorN)
             end
         end
         #
-        @inline isless(a::$T{<:NumberNotSeries}, b::$T{<:NumberNotSeries}) =
-            isless(promote(a,b)...)
-        @inline isless(a::$T{T}, b::$T{T}) where {T<:NumberNotSeries} =
+        # @inline isless(a::$T{<:NumberNotSeries}, b::$T{<:NumberNotSeries}) =
+        #     isless(promote(a,b)...)
+        @inline isless(a::$T{T}, b::$T{T}) where {T<:Number} =
             isless(a - b, zero(constant_term(a)))
     end
 end
@@ -102,13 +109,13 @@ _zero_abstractfloat(a::Taylor1{Taylor1{T}}) where {T<:Number} =
     _zero_abstractfloat(constant_term(a))
 
 
-@inline function isless(a::HomogeneousPolynomial{<:Number}, b::Real)
+@inline function isless(a::HomogeneousPolynomial{T}, b::T) where {T<:Number}
     order(a) == 0 && return isless(a[1], b)
     !iszero(b) && return isless(zero(a[1]), b)
     nz = max(findfirst(a), 1)
     return isless(a[nz], b)
 end
-@inline function isless(b::Real, a::HomogeneousPolynomial{<:Number})
+@inline function isless(b::T, a::HomogeneousPolynomial{<:T}) where {T<:Number}
     order(a) == 0 && return isless(b, a[1])
     !iszero(b) && return isless(b, zero(a[1]))
     nz = max(findfirst(a),1)

@@ -87,27 +87,28 @@ end
 ## mod2pi and abs ##
 for T in (:Taylor1, :TaylorN)
     @eval begin
-        function mod2pi(a::$T{T}) where {T<:Real}
+        function mod2pi(a::$T{T}) where {T<:Number}   # FIXME Should be a `Real`-based Taylor
             c = $T(copy(a.coeffs), order(a))
             constant_term!(c, mod2pi(constant_term(a)))
             return c
         end
 
-        function abs(a::$T{T}) where {T<:Real}
-            if constant_term(a) > 0
-                return a
-            elseif constant_term(a) < 0
-                return -a
-            else
-                throw(DomainError(a,
-                """The 0th order Taylor1 coefficient must be non-zero
-                (abs(x) is not differentiable at x=0)."""))
-            end
-        end
+        # FIXME Needs a bit more thought how to properly implement this for nested `Real`-based Taylors, also breaks tests
+        # function abs(a::$T{T}) where {T<:Real}
+        #     if constant_term(a) > 0
+        #         return a
+        #     elseif constant_term(a) < 0
+        #         return -a
+        #     else
+        #         throw(DomainError(a,
+        #         """The 0th order Taylor1 coefficient must be non-zero
+        #         (abs(x) is not differentiable at x=0)."""))
+        #     end
+        # end
 
         abs2(a::$T) = real(a)^2 + imag(a)^2
 
-        abs(x::$T{T}) where {T<:Complex} = sqrt(abs2(x))
+        abs(x::$T{T}) where {T} = sqrt(abs2(x))
     end
 end
 

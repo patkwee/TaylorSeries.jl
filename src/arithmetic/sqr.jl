@@ -46,7 +46,7 @@ function sqr_orderzero!(c::Taylor1{T}, a::Taylor1{T}) where {T<:NumberNotSeries}
     @inbounds c.coeffs[1] = a.coeffs[1]^2
     return nothing
 end
-function sqr_orderzero!(c::TaylorN{T}, a::TaylorN{T}) where {T<:NumberNotSeries}
+function sqr_orderzero!(c::TaylorN{T}, a::TaylorN{T}) where {T<:Number}
     @inbounds c.coeffs[1].coeffs[1] = a.coeffs[1].coeffs[1]^2
     return nothing
 end

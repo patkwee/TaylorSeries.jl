@@ -125,7 +125,7 @@ function sqrt!(c::Taylor1{T}, a::Taylor1{T}, ::Taylor1{T}, k::Int,
 end
 
 function sqrt!(c::TaylorN{T}, a::TaylorN{T}, ::TaylorN{T}, k::Int) where
-        {T<:NumberNotSeriesN}
+        {T<:Number}
     _check_same_space(c, a)
     if k == 0
         @inbounds c.coeffs[1].coeffs[1] = sqrt( constant_term(a) )
